@@ -1,17 +1,40 @@
 package com.bhargo.main.codeEval;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import com.bhargo.main.codeEval.model.CharCount;
+
+import java.io.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Created by barya on 8/3/16.
  */
 public class CodeEvalChallenges {
+
+    public static void huffmansCode(String[] args) throws IOException {
+        File file = new File(args[0]);
+        BufferedReader buffer = new BufferedReader(new FileReader(file));
+        String line="";
+        char ch;
+        Map<String,Integer> charToCountMap = new HashMap<>();
+        while ((line = buffer.readLine()) != null) {
+
+            charToCountMap.clear();
+            Arrays.asList(line.split("")).stream().forEach(n -> {
+                if(charToCountMap.keySet().contains(n)) {
+                    charToCountMap.put(n,charToCountMap.get(n)+1);
+                } else {
+                    charToCountMap.put(n,1);
+                }
+            });
+            List<CharCount> list = new ArrayList<>();
+            charToCountMap.entrySet().stream().forEach(en -> list
+                    .add(new CharCount(en.getKey(),en.getValue())));
+
+            Collections.sort(list);
+
+        }
+    }
 
     static void codeevalCipher(String[] args) throws IOException {
         File file = new File(args[0]);
@@ -43,24 +66,41 @@ public class CodeEvalChallenges {
         }
     }
 
-    static void codeevalPrintMatrix() {
-        String num;
+    public static void codeevalPrintMatrix() {
         int length;
-        for(int i =1;i<=5;i++) {
-            for(int j =1;j<=5;j++) {
-                num = Integer.toString(i*j);
-                length = num.length();
-                System.out.print((i*j));
-                for(int s =1;s<(5-length);s++) {
-                    System.out.print("*");
+        for(int i =1;i<=12;i++) {
+            for(int j =1;j<=12;j++) {
+                length = Integer.toString(i*j).length();
+                if(j!=1) {
+                    for(int s =1;s<(5-length);s++) {
+                        System.out.print(" ");
+                    }
                 }
+                System.out.print(i*j);
             }
             System.out.println();
         }
 
     }
 
-    static void codeevalFizzBuzzChallenge(String[] args) throws Exception{
+    public static void reverseSentence(String[] args) throws IOException {
+        File file = new File(args[0]);
+        BufferedReader buffer = new BufferedReader(new FileReader(file));
+        String line;
+        String[] arr;
+        while ((line = buffer.readLine()) != null) {
+            line = line.trim();
+            // Process line of input Here
+            arr = line.split(" ");
+            for(int i = arr.length-1;i>=0;i--) {
+                System.out.print(arr[i] + " ");
+            }
+            System.out.println();
+        }
+
+    }
+
+    public static void codeevalFizzBuzzChallenge(String[] args) throws Exception{
         File file = new File(args[0]);
         BufferedReader buffer = new BufferedReader(new FileReader(file));
         String line;
@@ -88,5 +128,41 @@ public class CodeEvalChallenges {
             }
             System.out.println();
         }
+    }
+
+    public static void removeCharacters(String[] args) throws IOException {
+        File file = new File(args[0]);
+        BufferedReader buffer = new BufferedReader(new FileReader(file));
+        String line;
+        List<String> stringList;
+        String[] sentence = new String[1];
+        while ((line = buffer.readLine()) != null) {
+            line = line.trim();
+            stringList =Arrays.asList(line.split(","));
+            sentence[0] = stringList.get(0);
+            Arrays.asList(stringList.get(stringList.size()-1).split(""))
+                    .stream().filter(n -> !n.equals(" ")).forEach(n ->
+                sentence[0] = sentence[0].replaceAll(n,""));
+            for (String str: sentence) {
+                System.out.println(str);
+            }
+        }
+    }
+
+    public static void longestLine(String[] args) throws IOException {
+        File file = new File(args[0]);
+        BufferedReader buffer = new BufferedReader(new FileReader(file));
+        String line;
+        int numOfFLines=0; boolean isFirstLine=true;
+        List<String> sentenceList = new ArrayList<>();
+        while ((line = buffer.readLine()) != null) {
+            if(isFirstLine) {
+                isFirstLine = false;
+                numOfFLines = Integer.valueOf(line);
+            }
+            sentenceList.add(line);
+        }
+        sentenceList.stream().sorted((n1,n2) -> -Integer.valueOf(n1.length())
+                .compareTo(Integer.valueOf(n2.length()))).limit(numOfFLines).forEach(System.out::println);
     }
 }
