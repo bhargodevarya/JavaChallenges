@@ -1,6 +1,8 @@
 package com.bhargo.main.hackerRank;
 
+import java.io.*;
 import java.util.*;
+//import java.util.regex.Matcher;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -9,6 +11,72 @@ import java.util.stream.Collectors;
  * Created by barya on 8/3/16.
  */
 public class HackeRankChallenges {
+
+    public static void compareTriplets() {
+        Scanner in = new Scanner(System.in);
+        int a0 = in.nextInt();
+        int a1 = in.nextInt();
+        int a2 = in.nextInt();
+        int b0 = in.nextInt();
+        int b1 = in.nextInt();
+        int b2 = in.nextInt();
+
+        int aliceScore =0,bobScore=0;
+        if(a0 > b0) {
+            aliceScore++;
+        } else if(b0 > a0) {
+            bobScore++;
+        }
+        if(a1 > b1) {
+            aliceScore++;
+        } else if(b1 > a1) {
+            bobScore++;
+        }
+        if(a2 > b2) {
+            aliceScore++;
+        } else if(b2 > a2) {
+            bobScore++;
+        }
+        System.out.println(aliceScore + " " + bobScore);
+    }
+
+    public static void arraySum() {
+        Scanner scanner = new Scanner(System.in);
+        Pattern pattern = Pattern.compile("\\n");
+        scanner.useDelimiter(pattern);
+
+        String size = scanner.nextLine();
+
+        String[] data = scanner.nextLine().split(" ");
+        int[] sum =new int[1];
+        Arrays.asList(data).stream().map(n -> Integer.valueOf(n)).forEach(n -> sum[0] = sum[0] + n);
+        System.out.println(sum[0]);
+    }
+
+    public static void  arrayLeftRotation() throws IOException {
+        String temp;
+        Scanner scanner = new Scanner(System.in);
+        Pattern pattern = Pattern.compile("\\n");
+        scanner.useDelimiter(pattern);
+
+        String[] metadata = scanner.nextLine().split(" ");
+        int numOfRotations = Integer.valueOf(metadata[1]);
+
+        String[] data = scanner.nextLine().split(" ");
+
+        while (numOfRotations > 0){
+            String numToSwap = data[0];
+            for(int i =data.length -1;i>=0;i--) {
+                temp  = data[i];
+                data[i] = numToSwap;
+                numToSwap = temp;
+            }
+            numOfRotations--;
+        }
+        for (String str: data) {
+            System.out.print(str + " ");
+        }
+    }
 
     static void hackerRankDataType() {
         int i =4;

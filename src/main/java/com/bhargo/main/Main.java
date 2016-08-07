@@ -1,6 +1,7 @@
 package com.bhargo.main;
 
 import com.bhargo.main.codeEval.CodeEvalChallenges;
+import com.bhargo.main.hackerRank.HackeRankChallenges;
 
 import java.io.*;
 import java.util.*;
@@ -26,7 +27,10 @@ public class Main {
         CodeEvalChallenges.codeevalPrintMatrix();
         System.out.println(Arrays.asList(str.split("")).contains("s"));*/
 
-        CodeEvalChallenges.longestLine(args);
+       // CodeEvalChallenges.longestLine(args);
+       // HackeRankChallenges.arrayLeftRotation();
+       // HackeRankChallenges.arraySum();
+        HackeRankChallenges.compareTriplets();
 
     }
 }
