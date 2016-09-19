@@ -1,5 +1,7 @@
 package com.bhargo.main.hackerRank;
 
+import com.bhargo.main.model.Shop;
+
 import java.io.*;
 import java.util.*;
 //import java.util.regex.Matcher;
@@ -11,6 +13,432 @@ import java.util.stream.Collectors;
  * Created by barya on 8/3/16.
  */
 public class HackeRankChallenges {
+
+    public static void walMartChallenge() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String line = br.readLine();
+        int numOfJunctions = Integer.parseInt(line);
+
+        int numOfQueues  = Integer.parseInt(br.readLine());
+        Map<Node, List<qSpec>> data = new HashMap<>();
+        List<List<String>> qData = new ArrayList<>();
+        for (int i = 0; i < numOfQueues; i++) {
+            qData.add(Arrays.asList(br.readLine().split(" ")));
+        }
+        Map<String, List<String>> map = new HashMap<>();
+
+        //qData.stream().collect(Collectors.groupingBy(n -> n.get(1))).keySet().stream().sorted((s1,s2) -> -s1.compareTo(s2)).collect(Collectors.toSet());
+
+        List<String> temp;
+        for (List<String> list:qData) {
+            if(map.containsKey(list.get(1))) {
+                temp = map.get(list.get(1));
+                temp.add(list.get(0).concat("-").concat(list.get(2)));
+                map.put(list.get(1), temp);
+
+            } else {
+                temp = new ArrayList<>();
+                temp.add(list.get(0).concat("-").concat(list.get(2)));
+                map.put(list.get(1), temp);
+            }
+
+        }
+
+        //map.forEach((k,v) -> System.out.println(k  + " " + v));
+
+        Set<String> s = map.keySet().stream().sorted((k1,k2) -> k2.compareTo(k1)).collect(Collectors.toSet());
+        TreeSet<String> ts = new TreeSet<>(Collections.reverseOrder());
+        //ts.stream().forEach(System.out::println);
+
+        int[] in =new int[]{0};
+
+
+
+        //Set<String> set = map.keySet().stream().sorted((k1,k2) -> k2.compareTo(k1)).collect(Collectors.toSet());
+        ts.addAll(map.keySet());
+        ts.stream().forEach(key -> {
+                Node node = new Node(key);
+                List<qSpec> qSpecList = new ArrayList<qSpec>();
+                map.get(key).forEach(l -> {
+                    Node fromNode = new Node(l.split("-")[0]);
+                    Queue<String> q = new PriorityQueue<String>();
+                    int t = in[0]+Integer.valueOf(l.split("-")[1]);
+                    for (int i =in[0]+1; i<=t;i++) {
+                        if(i == in[0]+Integer.valueOf(l.split("-")[1])) {
+                            in[0] =i;
+                        }
+                        q.add(Integer.toString(i));
+                    }
+                    qSpec value = new qSpec(fromNode, q);
+                    if(fromNode.value.equals("3")) {
+                        q.add("-1");
+                    }
+                    qSpecList.add(value);
+                });
+                data.put(node,qSpecList);
+
+        });
+        data.forEach((k,v) -> {
+            System.out.println(k + " " + v);
+        });
+
+        /*map.entrySet().stream().forEach(n -> {
+            Node node = new Node(n.getKey());
+            List<qSpec> qSpecList = new ArrayList<qSpec>();
+            n.getValue().forEach(l -> {
+                Node fromNode = new Node(l.split("-")[0]);
+                Queue<String> q = new PriorityQueue<String>();
+                for (int i =in[0]+1; i<=in[0]+Integer.valueOf(l.split("-")[1]);i++) {
+                    if(i == Integer.valueOf(l.split("-")[1])) {
+                        in[0] =i;
+                    }
+                    q.add(Integer.toString(i));
+                }
+                qSpec value = new qSpec(fromNode, q);
+                if(fromNode.value.equals("3")) {
+                    q.add("-1");
+                }
+                qSpecList.add(value);
+            });
+            data.put(node,qSpecList);
+        });*/
+
+        move(data,"7");
+
+    }
+
+    private static void move(Map<Node, List<qSpec>> data, String root) {
+        int turn =0;
+        int time =0;
+        List<qSpec> list;
+        while (true) {
+            time++;
+            list = data.get(new Node(root));
+            if(turn == 0) {
+                if(list.get(0).queue.poll().equals("-1"))break;
+                if(data.containsKey(list.get(0).fromNode)) {
+                    move(data,list.get(0).fromNode.value);
+                } else {
+                    list.get(0).queue.poll();
+                }
+                turn = 1;
+            } else if(turn == 1) {
+                if(list.get(1).queue.poll().equals("-1"))break;
+                if(data.containsKey(list.get(1).fromNode)) {
+                    move(data,list.get(1).fromNode.value);
+                } else {
+                    list.get(0).queue.poll();
+                }
+                turn = 0;
+            }
+        }
+        System.out.println(time);
+    }
+
+    static class Node {
+        private String value;
+
+        public Node(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "value='" + value + '\'' +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Node node = (Node) o;
+            return Objects.equals(value, node.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(value);
+        }
+    }
+
+    private static class qSpec {
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            qSpec qSpec = (qSpec) o;
+            return Objects.equals(fromNode, qSpec.fromNode) &&
+                    Objects.equals(queue, qSpec.queue);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(fromNode, queue);
+        }
+
+        private Node fromNode;
+        private Queue<String> queue;
+
+        public qSpec(Node fromNode, Queue<String> queue) {
+            this.fromNode = fromNode;
+            this.queue = queue;
+        }
+
+        public void addToQueue(String in) {
+            queue.add(in);
+        }
+
+        public String removeFromQueue() {
+            if(queue.size() != 0)
+            return queue.poll();
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            return "qSpec{" +
+                    "fromNode=" + fromNode +
+                    ", queue=" + queue +
+                    '}';
+        }
+    }
+
+    static Integer counter = new Integer(0);
+
+    private static boolean decreaseRec(List<Integer> upperList, List<Integer> lowerList, int index, int[] count) {
+        int valueUpper = upperList.get(index);
+        int valueLower = lowerList.get(index);
+        if(index == 0 && valueUpper != 0 && valueLower != 0) {
+            upperList.set(index, valueUpper -1);
+            lowerList.set(index, valueLower -1);
+            return true;
+        } else if(index ==0 && valueUpper == 0 && valueLower == 0) {
+            return false;
+        }
+        if(valueUpper == 0 && valueLower == 0)
+            return false;
+        else {
+            upperList.set(index, valueUpper -1);
+            lowerList.set(index, valueLower -1);
+            decreaseRec(upperList,lowerList, index -1, count);
+        }
+        return false;
+    }
+
+    private static boolean isEverythingSame(List<Integer> list, int num) {
+        Set<Integer> set = list.stream().distinct().collect(Collectors.toSet());
+        return set.size() ==1 && set.contains(num);
+    }
+
+    public static void dynamicFactorial() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String line = br.readLine();
+        long N = Long.parseLong(line);
+        List<Long> list = new ArrayList<>();
+        list.add(0,1L);list.add(1,1L);list.add(2,2L);
+        for (int i = 0; i < N; i++) {
+            System.out.println(fact(Integer.parseInt(br.readLine()), list));
+        }
+    }
+
+    private static long fact(int n, List<Long> list) {
+        if(n == 0 || n == 1)
+            return list.get(0);
+        else if(n ==2)
+            return list.get(2);
+        if(list.size() >n)
+            return list.get(n);
+
+        for(int j =3;j<=n;j++) {
+            list.add(j,j*list.get(j-1));
+        }
+        return list.get(n);
+
+        /*if(list.size() <= n+1) {
+            list.add(n,n*fact(n-1, list));
+            return list.get(n);
+        } else {
+            return list.get(n);
+        }*/
+
+    }
+
+    /**
+     * Dynamic programming example
+     */
+    public static void samuAndShopping() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String line = br.readLine();
+        int  numOfTestCases = Integer.parseInt(line);
+        List<Shop> shopList = new ArrayList<>();
+
+        String[] temp;
+        for(int i =1;i<=numOfTestCases;i++) {
+            int numOfShops = Integer.valueOf(br.readLine());
+            for (int j =1;j<=numOfShops;j++) {
+                temp = br.readLine().split(" ");
+                shopList.add(new Shop(Integer.valueOf(temp[0]),Integer.valueOf(temp[1]),Integer.valueOf(temp[2])));
+            }
+        }
+        shopList.forEach(System.out::println);
+
+    }
+
+
+    public static void hopClouds() {
+        int count =0;
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        int c[] = new int[n];
+        for(int c_i=0; c_i < n; c_i++){
+            c[c_i] = in.nextInt();
+        }
+        int initLoc = 0;
+        while(initLoc < n-1) {
+            if(initLoc+2 < n && c[initLoc + 2] == 0) {
+                count++;
+                initLoc = initLoc +2;
+            } else if(initLoc+1 < n && c[initLoc + 1] == 0) {
+                count++;
+                initLoc = initLoc +1;
+            }
+        }
+        System.out.println(count);
+    }
+
+    public static void stringConstruction() {
+        String s="";
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        for(int a0 = 0; a0 < n; a0++){
+            s = in.next();
+            String p ="";
+            int i =0,cost =0;
+            String sub;
+            while (p.length() != s.length()) {
+                sub = Character.toString(s.charAt(i));
+                p=p.concat(sub);
+                cost++;
+                if(s.substring(i+1,s.length()).startsWith(p)) {
+                    p = p.concat(p);
+                }
+                i++;
+            }
+            System.out.println(cost);
+        }
+
+    }
+
+    public  static void sos(String s) {
+        int length = s.length();
+        int count=0;
+        int i =1;String sub;
+        while(i<=length) {
+            sub = s.substring(i-1,i+2);
+            if(!"SOS".equals(sub)) {
+                if(sub.charAt(0) != 'S') {
+                    count++;
+                }
+                if(sub.charAt(2) != 'S') {
+                    count++;
+                }
+                if(sub.charAt(1) != 'O') {
+                    count++;
+                }
+
+            }
+            i =i+3;
+        }
+        System.out.println(count);
+    }
+
+    public static void camelCase(String s) {
+        int i =0,count =0;
+        while (i<s.length()) {
+            if(Character.valueOf(s.charAt(i)).compareTo(s.substring(i,i+1).toUpperCase().charAt(0)) == 0) {
+                count++;
+            }
+            i++;
+        }
+        System.out.println(++count);
+    }
+
+    public static void queueUsningStack(String[] args) throws IOException {
+        List<String> opsList = new ArrayList<>();
+        int numOfOps=0;
+
+        File file = new File(args[0]);
+        BufferedReader buffer = new BufferedReader(new FileReader(file));
+        String line;
+        int numOfFLines=0; boolean isFirstLine=true;
+        List<String> sentenceList = new ArrayList<>();
+        while ((line = buffer.readLine()) != null) {
+            if(isFirstLine) {
+                isFirstLine = false;
+                numOfOps = Integer.valueOf(line);
+            } else {
+                opsList.add(line);
+            }
+
+        }
+
+        /*Scanner scanner = new Scanner(System.in);
+        Pattern pattern = Pattern.compile("\\n");
+        scanner.useDelimiter(pattern);
+
+        numOfOps = scanner.nextInt();
+
+        for(int i =0;i<=numOfOps;i++) {
+            opsList.add(scanner.nextLine());
+        }
+        opsList.remove(0);*/
+
+        Stack<String> stack1 = new Stack<>();
+        Stack<String> stack2 = new Stack<>();
+        List<String> temp = new ArrayList<>();
+        Stack<String>[] stackPushPop = new Stack[]{stack1,stack2};
+        int[] i =new int[]{1};
+
+        opsList.forEach(n ->{
+            if(n.substring(0,1).equals("1")) {
+                while(stack2.size() >0) {
+                    stack1.push(stack2.pop());
+                }
+                stack1.push(n.split(" ")[1]);
+            } else if(n.substring(0,1).equals("2")) {
+                while( stack1.size() > 1) {
+                    stack2.push(stack1.pop());
+                }
+                if(stack1.size() > 0) {
+                    stack1.pop();
+                } else
+                    stack2.pop();
+            } else if(n.substring(0,1).equals("3")) {
+                while( stack1.size() > 1) {
+                    stack2.push(stack1.pop());
+                }
+                if(stack1.size() > 0)
+                System.out.println(stack1.peek());
+                else System.out.println(stack2.peek());
+            }
+        });
+    }
+
+    private static String ops(Stack<String> stack, String code) {
+        String value;
+        switch (code) {
+            case "2": value = stack.pop();break;
+            case "3": value = stack.peek();break;
+            default: value = "";
+        }
+        return value;
+    }
 
     public static void compareTriplets() {
         Scanner in = new Scanner(System.in);

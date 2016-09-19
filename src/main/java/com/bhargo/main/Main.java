@@ -2,6 +2,7 @@ package com.bhargo.main;
 
 import com.bhargo.main.codeEval.CodeEvalChallenges;
 import com.bhargo.main.hackerRank.HackeRankChallenges;
+import com.bhargo.main.misc.dynamic.DynamicExp;
 
 import java.io.*;
 import java.util.*;
@@ -30,7 +31,14 @@ public class Main {
        // CodeEvalChallenges.longestLine(args);
        // HackeRankChallenges.arrayLeftRotation();
        // HackeRankChallenges.arraySum();
-        HackeRankChallenges.compareTriplets();
-
+        // HackeRankChallenges.compareTriplets();
+        // HackeRankChallenges.queueUsningStack(args);
+        //HackeRankChallenges.sos("SOSSOT");
+        //HackeRankChallenges.hopClouds();
+        //HackeRankChallenges.stringConstruction();
+        //DynamicExp.expressAsSumOf(5);
+        //HackeRankChallenges.samuAndShopping();
+        //HackeRankChallenges.walMartChallenge();
+        //HackeRankChallenges.dynamicRopeBurning();
     }
 }
