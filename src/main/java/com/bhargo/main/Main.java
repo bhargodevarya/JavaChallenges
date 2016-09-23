@@ -2,7 +2,7 @@ package com.bhargo.main;
 
 import com.bhargo.main.codeEval.CodeEvalChallenges;
 import com.bhargo.main.hackerRank.HackeRankChallenges;
-import com.bhargo.main.misc.dynamic.DynamicExp;
+import com.bhargo.main.hackerearth.sepCircuits.SepCircuitsChallenges;
 
 import java.io.*;
 import java.util.*;
@@ -40,5 +40,7 @@ public class Main {
         //HackeRankChallenges.samuAndShopping();
         //HackeRankChallenges.walMartChallenge();
         //HackeRankChallenges.dynamicRopeBurning();
+        //SepCircuitsChallenges.printHackerEarth();
+        int it = 1000000;
     }
 }
