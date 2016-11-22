@@ -14,6 +14,151 @@ import java.util.stream.Collectors;
  */
 public class HackeRankChallenges {
 
+    public static void sumNumbers(boolean readFromFile) throws IOException {
+        String[] arr=null;
+        if(readFromFile) {
+            File file = new File("C:\\Users\\barya\\data.txt.txt");
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            String data = null;
+            while((data = bufferedReader.readLine()) != null) {
+                arr = data.split(" ");
+            }
+        } else {
+            Scanner scanner = new Scanner(System.in);
+            String data = scanner.nextLine();arr = data.split(" ");
+        }
+
+        Arrays.sort(arr);
+        String[] ans =doDiff(doSum(arr),arr[0]);
+        for(int j = 0;j<ans.length;j++) {
+            System.out.print(ans[j]);
+        }
+        System.out.println();
+        ans = doDiff(doSum(arr),arr[4]);
+        for(int j = 0;j<ans.length;j++) {
+            System.out.print(ans[j]);
+        }
+    }
+
+    private static String doSum(String[] arr) throws IOException {
+        String temp = "0",sum;
+        String[] result = null;
+
+        String[] total = new String[]{"0"};
+        StringBuffer sb;
+
+        for(int i =0;i<=arr.length-1;i++) {
+            if(arr[i].length() > total[0].length()) {
+                total[0] = append(arr[i], total[0]);
+            } else if(arr[i].length() < total[0].length()){
+                arr[i] = append(arr[i], total[0]);
+            }
+
+            result = new String[total[0].length()];
+            for (int j =total[0].length()-1; j>=0; j--) {
+                sum = sum(Integer.valueOf(total[0].substring(j, j+1)),
+                        Integer.valueOf(arr[i].substring(j, j+1)), temp);
+                if(sum.length() == 2) {
+                    if(j == 0) {
+                        result[j] = sum;
+                        temp = "0";
+                    } else {
+                        temp = sum.substring(0,1);
+                        result[j] = sum.substring(1,2);
+                    }
+                } else {
+                    result[j] = sum;
+                    temp = "0";
+                }
+            }
+
+            sb = new StringBuffer("");
+            for(String str: result) {
+                sb.append(str);
+            }
+            total[0] = sb.toString();
+        }
+        return total[0];
+    }
+
+    public static String[] doDiff(String first, String second) {
+        Integer firstInt, secondInt;
+        boolean flag=false;
+        if(first.length() < second.length()) {
+            first = append(first, second);
+        } else if(second.length() < first.length()) {
+            second = append(second, first);
+        }
+
+        String[] result = new String[second.length()];
+        for(int i =second.length()-1;i>=0;i--) {
+            firstInt = Integer.valueOf(first.substring(i,i+1));
+            secondInt = Integer.valueOf(second.substring(i,i+1));
+            if(flag) {
+                if(firstInt-1>=secondInt) {
+                    if(secondInt != 0) {
+                        result[i] =diff(firstInt-1, secondInt);
+                        //System.out.print();
+                    } else {
+                        result[i] = Integer.toString(firstInt-1);
+                        //System.out.print(firstInt-1);
+                    }
+                    flag = false;
+                } else {
+                    flag = true;
+                    result[i] = diff(firstInt-1+10, secondInt);
+                    //System.out.print(diff(firstInt-1+10, secondInt));
+                }
+            } else {
+                if(firstInt>=secondInt) {
+                    result[i] = diff(firstInt, secondInt);
+                    //System.out.print(diff(firstInt, secondInt));
+                    flag = false;
+                } else {
+                    flag = true;
+                    result[i] = diff(firstInt+10, secondInt);
+                    //System.out.print(diff(firstInt+10, secondInt));
+                }
+            }
+        }
+        return result;
+    }
+
+    private static String append(String first, String second) {
+        StringBuffer temp = new StringBuffer("");
+        for (int i =1;i<=Math.abs(first.length() - second.length());i++) {
+            temp.append(0);
+        }
+        if(first.length() < second.length()){
+            return temp.toString().concat(first);
+        }else {
+            return temp.toString().concat(second);
+        }
+    }
+
+    private static String sum(int i, int j, String temp) {
+        return Integer.toString(i+j+Integer.valueOf(temp));
+    }
+
+    public static String diff(int i, int j) {
+        return Integer.toString(i -j);
+    }
+
+    public static void stairCase() {
+        int n = new Scanner(System.in).nextInt();
+
+        for (int i = 0; i < n; i++) {
+            int j = 1;
+            for (; j < n - i; j++) {
+                System.out.print(" ");
+            }
+            for (int k = 0; k <= n - j; k++) {
+                System.out.print("#");
+            }
+            System.out.println();
+        }
+    }
+
     public static void walMartChallenge() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String line = br.readLine();
@@ -482,7 +627,6 @@ public class HackeRankChallenges {
     }
 
     public static void  arrayLeftRotation() throws IOException {
-        String temp;
         Scanner scanner = new Scanner(System.in);
         Pattern pattern = Pattern.compile("\\n");
         scanner.useDelimiter(pattern);
@@ -492,18 +636,59 @@ public class HackeRankChallenges {
 
         String[] data = scanner.nextLine().split(" ");
 
-        while (numOfRotations > 0){
-            String numToSwap = data[0];
-            for(int i =data.length -1;i>=0;i--) {
-                temp  = data[i];
-                data[i] = numToSwap;
-                numToSwap = temp;
+        if(data.length != Integer.valueOf(metadata[0])) {
+            throw new IllegalArgumentException();
+        }
+
+
+        int numOfQueries = Integer.valueOf(metadata[2]);
+        int[] queriesArr = new int[numOfQueries];
+        int originalIndex;
+        for (int i =0;i<numOfQueries;i++) {
+            queriesArr[i] = scanner.nextInt();
+        }
+
+        for (int index: queriesArr) {
+            if(numOfRotations % data.length == 0 || numOfRotations == 0) {
+                originalIndex = index;
+            } else {
+                originalIndex =index - numOfRotations;
+                if(originalIndex < 0) {
+                    originalIndex += data.length;
+                }
             }
-            numOfRotations--;
+            System.out.println(data[originalIndex]);
         }
-        for (String str: data) {
-            System.out.print(str + " ");
+    }
+
+    public static void diagonalDifference() {
+        Scanner scanner = new Scanner(System.in);
+        Pattern pattern = Pattern.compile("\\n");
+        scanner.useDelimiter(pattern);
+
+        int matrixSize = scanner.nextInt();
+
+        String[][] matrix = new String[matrixSize][matrixSize];
+
+        for(int i =-1;i<=matrixSize-1;i++) {
+            if(i == -1){
+                scanner.nextLine();
+            }
+            else
+                matrix[i] = scanner.nextLine().split(" ");
         }
+
+        int temp1=0,temp2=matrixSize-1;
+
+        int[] resultArr = new int[matrixSize];
+        for(int i =0;i<matrixSize;i++) {
+            if(temp1 != temp2) {
+                resultArr[i] = Integer.valueOf(matrix[i][temp1]) - Integer.valueOf(matrix[i][temp2]);
+            }
+            temp1++;temp2--;
+        }
+
+        System.out.println(Math.abs(Arrays.stream(resultArr).sum()));
     }
 
     static void hackerRankDataType() {
@@ -585,5 +770,17 @@ public class HackeRankChallenges {
             }
         }
         System.out.println(word);
+    }
+
+    private static List<String> readFile(String fileLoc) throws IOException {
+        File file = new File(fileLoc);
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+        String line;
+        List<String> list = new ArrayList<>();
+        while((line = bufferedReader.readLine()) != null) {
+            list.add(line);
+        }
+        bufferedReader.close();
+        return list;
     }
 }

@@ -42,5 +42,10 @@ public class Main {
         //HackeRankChallenges.dynamicRopeBurning();
         //SepCircuitsChallenges.printHackerEarth();
         int it = 1000000;
+        //HackeRankChallenges.arrayLeftRotation();
+        //HackeRankChallenges.diagonalDifference();
+        //HackeRankChallenges.stairCase();
+        HackeRankChallenges.sumNumbers(false);
+       // Arrays.stream(HackeRankChallenges.doDiff( "3001208382","256741038")).forEach(System.out::print);
     }
 }
