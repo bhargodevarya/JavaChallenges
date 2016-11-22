@@ -14,6 +14,39 @@ import java.util.stream.Collectors;
  */
 public class HackeRankChallenges {
 
+    public static void beautifulDays() {
+        Scanner scanner = new Scanner(System.in);
+        String data = scanner.nextLine();
+        String[] arr = data.split(" ");
+        int count =0;
+        for(Integer i = Integer.valueOf(arr[0]);
+            i.compareTo(Integer.valueOf(arr[1])) <=0;
+            i = Math.incrementExact(i)) {
+            if(Math.abs(
+                    i - Integer.valueOf(trimLeadingZeroes(doReverse(i.toString())))
+            )%Integer.valueOf(arr[2]) == 0) {
+                count++;
+            }
+        }
+        System.out.println(count);
+    }
+
+    private static String trimLeadingZeroes(String str) {
+        StringBuffer sb = new StringBuffer();
+        boolean initialZero=true;
+        for (int i =0;i<=str.length()-1;i++) {
+            if(initialZero){
+                if(!str.substring(i, i+1).equals("0")) {
+                    initialZero = false;
+                    sb.append(str.substring(i, i+1));
+                }
+            } else {
+                sb.append(str.substring(i, i+1));
+            }
+        }
+        return sb.toString();
+    }
+
     public static void sumNumbers(boolean readFromFile) throws IOException {
         String[] arr=null;
         if(readFromFile) {
@@ -741,17 +774,17 @@ public class HackeRankChallenges {
         return Arrays.asList(new Integer[]{1,2,5,3,6,7,8});
     }
 
-    static void doReverse() {
-        String str = "I love to code";
+    private static String doReverse(String str) {
         int length = str.length();
         StringBuffer sb = new StringBuffer();
         while(length>0) {
             sb.append(reverse(str.substring(0,length)));
             length--;
         }
+        return sb.toString();
     }
 
-    static char reverse(String str) {
+    private static char reverse(String str) {
         return str.charAt(str.length()-1);
     }
 

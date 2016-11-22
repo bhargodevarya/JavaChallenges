@@ -45,7 +45,8 @@ public class Main {
         //HackeRankChallenges.arrayLeftRotation();
         //HackeRankChallenges.diagonalDifference();
         //HackeRankChallenges.stairCase();
-        HackeRankChallenges.sumNumbers(false);
+        //HackeRankChallenges.sumNumbers(false);
        // Arrays.stream(HackeRankChallenges.doDiff( "3001208382","256741038")).forEach(System.out::print);
+        HackeRankChallenges.beautifulDays();
     }
 }
