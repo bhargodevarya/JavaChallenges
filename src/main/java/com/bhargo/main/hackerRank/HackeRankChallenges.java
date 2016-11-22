@@ -14,6 +14,26 @@ import java.util.stream.Collectors;
  */
 public class HackeRankChallenges {
 
+    public static void cutTheSticks() throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        int numOfSticks = Integer.valueOf(bufferedReader.readLine());
+        List<String> data = Arrays.stream(bufferedReader.readLine().split(" ")).map(n -> n).collect(Collectors.toList());
+
+        Integer[] minimum=new Integer[1];
+        Integer[] counter = new Integer[]{new Integer(0)};
+        while(data.stream().distinct().count() != 1L || !data.stream().distinct().collect(Collectors.toList()).get(0).equals("0")){
+            minimum[0] = data.stream().map(n -> Integer.valueOf(n)).filter(n -> n != 0).min(Comparator.naturalOrder()).get();
+            if(minimum[0] != null) {
+                counter[0] = 0;
+                data = data.stream().filter(n -> !n.equals("0")).map(n -> {
+                    counter[0] = counter[0]+1;
+                    return Integer.toString(Integer.valueOf(n) - Integer.valueOf(minimum[0]));
+                }).collect(Collectors.toList());
+                System.out.println(counter[0]);
+            }
+        }
+    }
+
     public static void beautifulDays() {
         Scanner scanner = new Scanner(System.in);
         String data = scanner.nextLine();

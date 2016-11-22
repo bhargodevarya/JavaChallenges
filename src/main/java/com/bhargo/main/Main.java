@@ -47,6 +47,7 @@ public class Main {
         //HackeRankChallenges.stairCase();
         //HackeRankChallenges.sumNumbers(false);
        // Arrays.stream(HackeRankChallenges.doDiff( "3001208382","256741038")).forEach(System.out::print);
-        HackeRankChallenges.beautifulDays();
+       // HackeRankChallenges.beautifulDays();
+        HackeRankChallenges.cutTheSticks();
     }
 }
