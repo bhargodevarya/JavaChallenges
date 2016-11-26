@@ -3,6 +3,7 @@ package com.bhargo.main.hackerRank;
 import com.bhargo.main.model.Shop;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.*;
 //import java.util.regex.Matcher;
 import java.util.regex.Matcher;
@@ -13,6 +14,182 @@ import java.util.stream.Collectors;
  * Created by barya on 8/3/16.
  */
 public class HackeRankChallenges {
+
+    public static void kaprekarNumbers() {
+        Scanner scanner = new Scanner(System.in);
+        int lowerBound = scanner.nextInt();
+        int upperBound = scanner.nextInt();
+        BigInteger square = null;
+        BigInteger value = null;
+        int count=0;
+        int sum = 0;
+        for(int i = lowerBound;i<=upperBound;i++) {
+            value = new BigInteger(new Integer(i).toString());
+            square = value.multiply(value);
+           if(square.toString().equals("1") ||square.toString().length() > 1) {
+                if(!square.toString().equals("1")) {
+                    sum =Integer.valueOf(square.toString().substring(0,square.toString().length()/2)) +
+                            Integer.valueOf(square.toString().substring(square.toString().length()/2,square.toString().length()));
+                }
+                if(sum == i || square.toString().equals("1")) {
+                    count++;
+                    System.out.print(i + " ");
+                }
+            }
+        }
+        if (count == 0) {
+            System.out.println("INVALID RANGE");
+        }
+    }
+
+    public static void findDigits() {
+        int[] data = readIntAsIntArr();
+        int[] count = new int[]{0};
+        Arrays.stream(data).forEach(n -> {
+            count[0] = 0;
+            Arrays.stream(new Integer(n).toString().split("")).forEach(m -> {
+                if(!"0".equals(m) && n % Integer.valueOf(m) == 0) {
+                    count[0] += 1;
+                }
+            });
+            System.out.println(count[0]);
+        });
+    }
+
+    private static int[] readIntAsIntArr() {
+        Scanner scanner = new Scanner(System.in);
+        int numOfTc = scanner.nextInt();
+        int[] data =new int[numOfTc];
+        for(int i =0;i<numOfTc;i++) {
+            data[i] = scanner.nextInt();
+        }
+        return data;
+    }
+
+    public static void utopianTre() {
+        int[] data = readIntAsIntArr();
+
+        int[] init = new int[]{1};
+        Arrays.stream(data).forEach(n ->{
+            init[0] = 1;
+            if(n !=0)  {
+                if(n == 1) {
+                    System.out.println(init[0]*2);
+                }
+                else if(n % 2 == 0) {
+                    for (int j =0;j<n/2;j++) {
+                        init[0] = init[0]*2+1;
+                    }
+                } else {
+                    for (int j =0;j<=n/2;j++) {
+                        init[0] = init[0]*2+1;
+                    }
+                    init[0] = init[0]-1;
+                }
+            }
+            if(n != 1)
+            System.out.println(init[0]);
+        });
+    }
+
+    public static void designerPdfViewer() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] data = null;
+        String word = null;
+        for(int i =0;i<=1;i++) {
+            if(i == 0){
+                data = br.readLine().split(" ");
+            }
+            else {
+                word = br.readLine();
+            }
+        }
+        Map<Character, String> charToHeightMap = new HashMap<>();
+
+        class alphabet implements Comparable<alphabet> {
+
+            private char c;
+            private int height;
+
+            public alphabet(char c, int height) {
+                this.c = c;
+                this.height = height;
+            }
+
+            public int getHeight() {
+                return height;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                alphabet alphabet = (alphabet) o;
+                return c == alphabet.c;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(c);
+            }
+
+            @Override
+            public int compareTo(alphabet o) {
+                if(this.getHeight() == o.getHeight()) {
+                    return 0;
+                } else if(this.getHeight() < o.getHeight()) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        }
+
+        List<alphabet> list = new ArrayList<alphabet>();
+        int index=0;
+        for(char c ='a';c<='z';c++) {
+            charToHeightMap.put(c,data[index]);
+            index++;
+        }
+        Arrays.stream(word.split("")).forEach(n -> list.add(new alphabet(n.charAt(0),Integer.valueOf(charToHeightMap.get(n.charAt(0))))));
+        Collections.sort(list);
+
+        System.out.println(list.get(list.size()-1).getHeight()*list.size());
+
+
+    }
+
+    public static void timeConversion() throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        String data = bufferedReader.readLine();
+        int newHour;
+        if(data.contains("P")) {
+            String hours = data.split(":")[0];
+            if(hours.substring(0,1).equals("0")) {
+                newHour = 12+Integer.valueOf(hours.substring(1,2));
+            } else {
+                if(hours.equals("12")) {
+                    newHour = Integer.valueOf(hours);
+                } else {
+                    newHour = 12+Integer.valueOf(hours);
+                }
+            }
+            System.out.println(newHour+":"+data.split(":")[1]+":"+data.split(":")[2].replace("PM",""));
+        } else  {
+            if(data.substring(0,2).equals("12")) {
+                System.out.println("00"+":"+data.split(":")[1]+":"+data.split(":")[2].replace("AM",""));
+            } else {
+                System.out.println(data.replace("AM",""));
+            }
+        }
+    }
+
+    public static void veryBigSum() throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        bufferedReader.readLine();
+        String[] data = bufferedReader.readLine().split(" ");
+        System.out.println(doSum(data));
+    }
 
     public static void cutTheSticks() throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
@@ -679,26 +856,39 @@ public class HackeRankChallenges {
         System.out.println(sum[0]);
     }
 
-    public static void  arrayLeftRotation() throws IOException {
-        Scanner scanner = new Scanner(System.in);
-        Pattern pattern = Pattern.compile("\\n");
-        scanner.useDelimiter(pattern);
+    public static void  arrayLeftRotation(boolean readFromFile) throws IOException {
+        int numOfQueries=0, numOfRotations=0, originalIndex=0;
+        int[] queriesArr=null;
+        String[] data=null, metadata = null;
+        if(!readFromFile){
+            Scanner scanner = new Scanner(System.in);
+            Pattern pattern = Pattern.compile("\\n");
+            scanner.useDelimiter(pattern);
 
-        String[] metadata = scanner.nextLine().split(" ");
-        int numOfRotations = Integer.valueOf(metadata[1]);
+            metadata = scanner.nextLine().split(" ");
+            numOfRotations = Integer.valueOf(metadata[1]);
 
-        String[] data = scanner.nextLine().split(" ");
+            data = scanner.nextLine().split(" ");
 
-        if(data.length != Integer.valueOf(metadata[0])) {
-            throw new IllegalArgumentException();
-        }
+            if(data.length != Integer.valueOf(metadata[0])) {
+                throw new IllegalArgumentException();
+            }
 
 
-        int numOfQueries = Integer.valueOf(metadata[2]);
-        int[] queriesArr = new int[numOfQueries];
-        int originalIndex;
-        for (int i =0;i<numOfQueries;i++) {
-            queriesArr[i] = scanner.nextInt();
+            numOfQueries = Integer.valueOf(metadata[2]);
+            queriesArr = new int[numOfQueries];
+            for (int i =0;i<numOfQueries;i++) {
+                queriesArr[i] = scanner.nextInt();
+            }
+        } else {
+            File file = new File("");
+            BufferedReader bufferedReader = new BufferedReader(
+                    new FileReader(file));
+            String line = null;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                metadata = line.split(" ");
+            }
         }
 
         for (int index: queriesArr) {

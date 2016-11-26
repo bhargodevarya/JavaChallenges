@@ -5,6 +5,7 @@ import com.bhargo.main.hackerRank.HackeRankChallenges;
 import com.bhargo.main.hackerearth.sepCircuits.SepCircuitsChallenges;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -42,12 +43,20 @@ public class Main {
         //HackeRankChallenges.dynamicRopeBurning();
         //SepCircuitsChallenges.printHackerEarth();
         int it = 1000000;
-        //HackeRankChallenges.arrayLeftRotation();
+        //
+        // HackeRankChallenges.arrayLeftRotation(false);
         //HackeRankChallenges.diagonalDifference();
         //HackeRankChallenges.stairCase();
         //HackeRankChallenges.sumNumbers(false);
        // Arrays.stream(HackeRankChallenges.doDiff( "3001208382","256741038")).forEach(System.out::print);
        // HackeRankChallenges.beautifulDays();
-        HackeRankChallenges.cutTheSticks();
+        //HackeRankChallenges.cutTheSticks();
+        //HackeRankChallenges.veryBigSum();
+       // HackeRankChallenges.timeConversion();
+        // HackeRankChallenges.designerPdfViewer();
+        //HackeRankChallenges.utopianTre();
+       // HackeRankChallenges.findDigits();
+        //System.out.println(new BigInteger("77778").multiply(new BigInteger("77778")));
+        HackeRankChallenges.kaprekarNumbers();
     }
 }
