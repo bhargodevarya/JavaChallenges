@@ -57,6 +57,10 @@ public class Main {
         //HackeRankChallenges.utopianTre();
        // HackeRankChallenges.findDigits();
         //System.out.println(new BigInteger("77778").multiply(new BigInteger("77778")));
-        HackeRankChallenges.kaprekarNumbers();
+        //HackeRankChallenges.kaprekarNumbers();
+        System.out.println("calling");
+        //HackeRankChallenges.nonDivisibleSet();
+        //HackeRankChallenges.secondHighestDynamic(new Integer[]{41,41,7,5,9,6,4,1,12,45,36,19,34});
+        HackeRankChallenges.maxContOccuring("abcdgggthsdttttthfyrrstbk");
     }
 }

@@ -6,6 +6,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.util.*;
 //import java.util.regex.Matcher;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -14,6 +15,78 @@ import java.util.stream.Collectors;
  * Created by barya on 8/3/16.
  */
 public class HackeRankChallenges {
+
+    //2nd highest in an unsorted array
+    public static void secondHighestDynamic(Integer[] arr) {
+        int highestSoFar=0, secondHighestSofar=0;
+        if(arr[0] < arr[1]) {
+            highestSoFar = arr[1];secondHighestSofar=arr[0];
+        } else if(arr[0] > arr[1]) {
+            highestSoFar = arr[0];secondHighestSofar=arr[1];
+        } else {
+            highestSoFar=secondHighestSofar=arr[0];
+        }
+        //4,2,7,5,9,6,4,1,12,45,36,19,34
+        for(int i =2;i<arr.length;i++) {
+            if(arr[i]>=highestSoFar) {
+                secondHighestSofar = highestSoFar;
+                highestSoFar = arr[i];
+            } else if(arr[i] >= secondHighestSofar){
+                secondHighestSofar=arr[i];
+            }
+        }
+        System.out.println(secondHighestSofar);
+    }
+
+    //maximum continous occuring character
+    public static void maxContOccuring(String str) {
+        String[] data = str.split("");
+        int maxOccCharCount = 1;
+        int resultForChar=maxOccCharCount;
+        String res = data[0];
+        String reStr=null;
+        //abcdgggthsdttttthfyrrstbk
+        for(int i =1; i<data.length;i++) {
+            if(data[i].equals(res)) {
+                resultForChar++;
+            } else {
+                resultForChar =1;
+                res=data[i];
+            }
+            if(resultForChar > maxOccCharCount) {
+                reStr = data[i];
+                maxOccCharCount  = resultForChar;
+            }
+        }
+        System.out.println(maxOccCharCount + " " + reStr);
+    }
+
+
+    public static void nonDivisibleSet() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] arr = br.readLine().split(" ");
+        int n = Integer.parseInt(arr[0]);
+        int k = Integer.parseInt(arr[1]);
+        String[] stringData = br.readLine().split(" ");
+        List<Integer> result = new CopyOnWriteArrayList();
+        result.add(0);
+        int count =0;
+        System.out.println("starting the loop");
+        for(int i = 0;i<=stringData.length-1;i++) {
+            if(Integer.parseInt(stringData[i]) % k != 0) {
+                for(int in:result) {
+                    if(!(in + Integer.parseInt(stringData[i]) % k == 0)) {
+                        continue;
+                    } else {
+
+                    }
+                }
+                result.add(Integer.parseInt(stringData[i]));
+                ++count;
+            }
+        }
+        System.out.println(count);
+    }
 
     public static void kaprekarNumbers() {
         Scanner scanner = new Scanner(System.in);
